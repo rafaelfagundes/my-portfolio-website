@@ -53,10 +53,10 @@ const Home: NextPage = () => {
           boxShadow="xl"
         >
           <CardHeader isMobile={isMobile}></CardHeader>
-          <SocialButtons></SocialButtons>
+          <SocialButtons isMobile={isMobile}></SocialButtons>
           <HorizontalLine></HorizontalLine>
           <Flex justifyContent="center" p="25px 0px 5px 0px">
-            <Button icon="plus" color>
+            <Button isMobile={isMobile} icon="plus" color>
               More
             </Button>
           </Flex>
