@@ -32,7 +32,7 @@ function ThemeToggle() {
         position="absolute"
         top="0px"
         left={colorMode === "light" ? "0px" : "48px"}
-        transition="left 300ms"
+        transition="left 300ms ease-in-out"
       ></Box>
       <Box
         w="46px"

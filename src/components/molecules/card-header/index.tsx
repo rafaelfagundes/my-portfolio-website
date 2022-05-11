@@ -1,10 +1,16 @@
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
 import React from "react";
 
-function CardHeader() {
+type CardHeaderProps = {
+  isMobile: boolean;
+};
+
+function CardHeader({ isMobile }: CardHeaderProps) {
+  const avatarSize = isMobile ? "40vw" : 162;
+
   return (
     <Box
-      padding="40px 20px"
+      padding={isMobile ? "64px 20px 40px 20px" : "40px 20px"}
       textAlign="center"
       background="linear-gradient(113.07deg, #A12568 0%, #3B185F 100%);"
       display="flex"
@@ -16,8 +22,8 @@ function CardHeader() {
         alt="Rafael's Avatar Picture"
         src="./img/avatar.jpg"
         borderRadius="50%"
-        w="128"
-        h="128"
+        w={avatarSize}
+        h={avatarSize}
         mb={5}
       ></Image>
       <Heading color="white" mb={3} fontSize="2.1rem">

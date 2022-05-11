@@ -6,9 +6,10 @@ type ButtonProps = {
   children: string;
   color?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
+  isMobile: boolean;
 };
 
-function Button({ icon, children, color, onClick }: ButtonProps) {
+function Button({ icon, children, color, onClick, isMobile }: ButtonProps) {
   const fgColor = useColorModeValue("#000", "#fff");
   const isDark = useColorModeValue(0, 1);
 
@@ -17,6 +18,7 @@ function Button({ icon, children, color, onClick }: ButtonProps) {
       onClick={onClick}
       border={color ? "undefined" : `2px solid ${fgColor}`}
       w="180px"
+      maxW={isMobile ? "undefined" : "42vw"}
       h="44px"
       borderRadius="22px"
       mb="20px"
