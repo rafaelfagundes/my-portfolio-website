@@ -1,17 +1,27 @@
 {
-  "name": "my-portifolio-website",
-  "version": "0.1.0",
-  "private": true,
+  "name": "rafael-fagundes-website",
+  "author": "Rafael Fagundes",
+  "description": "Rafael's portifolio website",
+  "version": "1.0.0",
+  "license": "MIT",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.1.7",
+    "@chakra-ui/react": "^1.8.8",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "framer-motion": "^6.3.3",
     "next": "12.1.6",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-icons": "^4.3.1",
+    "three": "^0.140.2"
   },
   "devDependencies": {
     "@types/node": "17.0.31",
