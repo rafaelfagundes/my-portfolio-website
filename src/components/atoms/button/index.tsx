@@ -18,7 +18,7 @@ function Button({ icon, children, color, onClick, isMobile }: ButtonProps) {
       onClick={onClick}
       border={color ? "undefined" : `2px solid ${fgColor}`}
       w="180px"
-      maxW={isMobile ? "undefined" : "42vw"}
+      maxW={isMobile ? "42vw" : "undefined"}
       h="44px"
       borderRadius="22px"
       mb="20px"
