@@ -77,12 +77,12 @@ export default class MyDocument extends Document {
             href="/app-icons/favicon-16x16.png"
           ></link>
           <link rel="manifest" href="/manifest.json"></link>
-          <meta name="msapplication-TileColor" content="#440044"></meta>
+          <meta name="msapplication-TileColor" content="#111111"></meta>
           <meta
             name="msapplication-TileImage"
             content="/app-icons/ms-icon-144x144.png"
           ></meta>
-          <meta name="theme-color" content="#440044"></meta>
+          <meta name="theme-color" content="#111111"></meta>
         </Head>
         <body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
