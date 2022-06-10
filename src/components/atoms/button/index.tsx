@@ -2,7 +2,7 @@ import { Box, Image, Text, useColorModeValue } from "@chakra-ui/react";
 import React, { MouseEventHandler } from "react";
 
 type ButtonProps = {
-  icon: string;
+  icon?: string;
   children: string;
   color?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
@@ -17,8 +17,10 @@ function Button({ icon, children, color, onClick, isMobile }: ButtonProps) {
     <Box
       onClick={onClick}
       border={color ? "undefined" : `2px solid ${fgColor}`}
-      w="180px"
+      minW="180px"
       maxW={isMobile ? "42vw" : "undefined"}
+      pr="20px"
+      pl="20px"
       h="44px"
       borderRadius="22px"
       mb="20px"
@@ -32,14 +34,16 @@ function Button({ icon, children, color, onClick, isMobile }: ButtonProps) {
           : undefined
       }
     >
-      <Image
-        mr="8px"
-        w={22}
-        h={22}
-        alt={children}
-        src={`/icons/${icon}.svg`}
-        filter={color ? "invert(1)" : `invert(${isDark})`}
-      ></Image>
+      {icon && (
+        <Image
+          mr="8px"
+          w={22}
+          h={22}
+          alt={children}
+          src={`/icons/${icon}.svg`}
+          filter={color ? "invert(1)" : `invert(${isDark})`}
+        ></Image>
+      )}
       <Text
         textTransform="uppercase"
         fontWeight="medium"
