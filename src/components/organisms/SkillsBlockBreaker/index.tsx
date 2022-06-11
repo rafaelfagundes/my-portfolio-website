@@ -160,7 +160,7 @@ function SkillsBlockBreaker() {
   const [won, setWon] = useState<boolean>(false);
   const [lost, setLost] = useState<boolean>(false);
 
-  const [showInitialMessage, setShowInitialMessage] = useState(true);
+  const [showInitialMessage, setShowInitialMessage] = useState<boolean>(true);
 
   useEffect(() => {
     const ctx = canvas.current?.getContext("2d");
@@ -264,6 +264,7 @@ function SkillsBlockBreaker() {
     generateBricks();
     setLost(false);
     setWon(false);
+    // setShowInitialMessage(true);
   };
 
   return (
@@ -332,6 +333,9 @@ function SkillsBlockBreaker() {
         style={{ backgroundColor: `${bgColor}` }}
         onKeyDown={keyDownHandler}
         onMouseMove={mouseMoveHandler}
+        onClick={() => {
+          play = true;
+        }}
       ></StyledCanvas>
     </>
   );
