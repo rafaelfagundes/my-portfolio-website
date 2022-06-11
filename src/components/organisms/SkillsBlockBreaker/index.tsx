@@ -1,6 +1,7 @@
-import { Box, Image, useColorModeValue } from "@chakra-ui/react";
+import { Box, Image, Text, useColorModeValue } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useEffect, useRef, useState } from "react";
+import Button from "../../atoms/button";
 
 const CANVAS_WIDTH = 850;
 const CANVAS_HEIGHT = 640;
@@ -13,8 +14,8 @@ let paddleX = (CANVAS_WIDTH - PADDLE_WIDTH) / 2;
 let x = CANVAS_WIDTH / 2;
 let y = CANVAS_HEIGHT - 30;
 
-let dx = 2;
-let dy = -2;
+let dx = 3;
+let dy = -3;
 
 let score = 0;
 let lives = 3;
@@ -27,13 +28,26 @@ let brickPadding = 10;
 let brickOffsetTop = 64;
 let brickOffsetLeft = 30;
 
+let play = false;
+
 let bricks: any = [];
-for (var c = 0; c < brickColumnCount; c++) {
-  bricks[c] = [];
-  for (var r = 0; r < brickRowCount; r++) {
-    bricks[c][r] = { x: 0, y: 0, status: 1 };
+generateBricks();
+
+function generateBricks() {
+  for (var c = 0; c < brickColumnCount; c++) {
+    bricks[c] = [];
+    for (var r = 0; r < brickRowCount; r++) {
+      bricks[c][r] = { x: 0, y: 0, status: 1, label: "React" };
+    }
   }
 }
+
+let skills: [string, string, string, string, string][] = [
+  ["React", "NextJS", "Flutter", "React Native", "iOS Develop."],
+  ["Node.js", "Python", "TypeScript", "JavaScript", "HTML/CSS"],
+  ["Basic UI/UX", "Basic DevOps", "Linux", "Shell Script", "Excel/G Sheets"],
+  ["Git", "Figma", "Photoshop", "After Effects", "DaVinci Resolve"],
+];
 
 const StyledCanvas = styled.canvas`
   display: block;
@@ -90,7 +104,11 @@ function drawLives(
   }
 }
 
-function drawBricks(ctx: CanvasRenderingContext2D, primaryColor: string) {
+function drawBricks(
+  ctx: CanvasRenderingContext2D,
+  primaryColor: string,
+  secondaryColor: string
+) {
   for (var c = 0; c < brickColumnCount; c++) {
     for (var r = 0; r < brickRowCount; r++) {
       if (bricks[c][r].status == 1) {
@@ -103,6 +121,12 @@ function drawBricks(ctx: CanvasRenderingContext2D, primaryColor: string) {
         ctx.fillStyle = primaryColor;
         ctx.fill();
         ctx.closePath();
+
+        ctx.beginPath();
+        ctx.font = "18px Outfit";
+        ctx.fillStyle = secondaryColor;
+        ctx.fillText(skills[c][r], brickX + 10, brickY + 26);
+        ctx.closePath();
       }
     }
   }
@@ -111,14 +135,15 @@ function drawBricks(ctx: CanvasRenderingContext2D, primaryColor: string) {
 function SkillsBlockBreaker() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const primaryColor = useColorModeValue("#440044", "#FC7A57");
+  const secondaryColor = useColorModeValue("#FFF", "#000");
   const bgColor = useColorModeValue("rgba(255,255,255,.4)", "rgba(0,0,0,.15)");
   const bgColorLostMessage = useColorModeValue(
     "rgba(240,96,96,.9)",
     "rgba(100,40,40,.9)"
   );
   const bgColorWinMessage = useColorModeValue(
-    "rgba(200,180,0,.9)",
-    "rgba(140,126,0,.95)"
+    "rgba(255,132,39,.9)",
+    "rgba(245,106,0,.9)"
   );
   const ballColor = useColorModeValue("#DE3C4B", "#1B998B");
   const paddleColor = useColorModeValue("#FC7A57", "#FCD757");
@@ -135,6 +160,8 @@ function SkillsBlockBreaker() {
   const [won, setWon] = useState<boolean>(false);
   const [lost, setLost] = useState<boolean>(false);
 
+  const [showInitialMessage, setShowInitialMessage] = useState(true);
+
   useEffect(() => {
     const ctx = canvas.current?.getContext("2d");
     if (canvas.current !== null && canvas.current !== undefined && ctx) {
@@ -144,7 +171,7 @@ function SkillsBlockBreaker() {
         drawScore(ctx, primaryColor);
         drawLives(ctx, canvas?.current, primaryColor);
         drawPaddle(ctx, paddleX, paddleColor);
-        drawBricks(ctx, primaryColor);
+        drawBricks(ctx, primaryColor, secondaryColor);
         drawBall(ctx, x, y, ballColor);
         collisionDetection();
 
@@ -162,6 +189,7 @@ function SkillsBlockBreaker() {
             }
             if (!lives) {
               setLost(true);
+              play = false;
             } else {
               x = CANVAS_WIDTH / 2;
               y = CANVAS_HEIGHT - 30;
@@ -173,20 +201,15 @@ function SkillsBlockBreaker() {
         }
 
         // Recursive call to draw the next frame indefinitely
-        if (!won && !lost) {
+        if (play) {
           x += dx;
           y += dy;
-          requestAnimationFrame(draw);
-        } else {
-          x = -20;
-          y = -20;
-          console.log("Ended");
-          return false;
         }
+        requestAnimationFrame(draw);
       };
       draw();
     }
-  }, [primaryColor, ballColor, paddleColor, lost, won]);
+  }, [primaryColor, secondaryColor, ballColor, paddleColor]);
 
   const keyDownHandler = (e: any) => {
     if (e.key == "Right" || e.key == "ArrowRight") {
@@ -225,11 +248,22 @@ function SkillsBlockBreaker() {
             score++;
             if (score == brickRowCount * brickColumnCount) {
               setWon(true);
+              play = false;
             }
           }
         }
       }
     }
+  };
+
+  const restart = () => {
+    score = 0;
+    lives = 3;
+    x = CANVAS_WIDTH / 2;
+    y = CANVAS_HEIGHT - 30;
+    generateBricks();
+    setLost(false);
+    setWon(false);
   };
 
   return (
@@ -247,10 +281,49 @@ function SkillsBlockBreaker() {
             borderRadius: "10px",
           }}
         >
-          {won && <Image w="50%" src={winImage} alt="You Win!"></Image>}
-          {lost && <Image w="50%" src={lostImage} alt="Game Over!"></Image>}
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+          >
+            {won && <Image w="50%" src={winImage} alt="You Win!"></Image>}
+            {lost && <Image w="50%" src={lostImage} alt="Game Over!"></Image>}
+            <Box h={10}></Box>
+            <Button
+              isMobile={false}
+              onClick={() => {
+                restart();
+              }}
+            >
+              Restart
+            </Button>
+          </Box>
         </Box>
       )}
+
+      {showInitialMessage && (
+        <Box
+          w={CANVAS_WIDTH}
+          h={CANVAS_HEIGHT}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          position="absolute"
+          style={{
+            backgroundColor: bgColor,
+            borderRadius: "10px",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            setShowInitialMessage(false);
+            play = true;
+          }}
+        >
+          <Text>Click anywhere inside this frame to start!</Text>
+        </Box>
+      )}
+
       <StyledCanvas
         tabIndex={0}
         ref={canvas}
