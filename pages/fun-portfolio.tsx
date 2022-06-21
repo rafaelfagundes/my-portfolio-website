@@ -22,13 +22,15 @@ function FunPortfolio() {
         <Heading mb={3}>Tech Skills</Heading>
         <Text mb={5}>
           These below are my skills, you have 3 lives to try to break all of
-          them. Let&apos;s go!
+          them.
         </Text>
         <SkillsBlockBreaker></SkillsBlockBreaker>
         <Box h={20}></Box>
 
         <Heading mb={3}>Skills</Heading>
-        <Text mb={5}>In similique porro quia dolore debitis.</Text>
+        <Text mb={5}>
+          Now let&apos;s test your memory. Try to reveal my soft skills.
+        </Text>
         <MemoryGame></MemoryGame>
         <Box h={20}></Box>
       </Box>
