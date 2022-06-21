@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import _ from "lodash";
 import { useEffect, useState } from "react";
@@ -180,6 +180,28 @@ function MemoryGame() {
           ></SoftSkillIconLabel>
         ))}
       </Box>
+      <>
+        {/* Preload Images To Avoid Loading When Card Is Flipped */}
+        <span style={{ display: "none" }}>
+          <Image alt="Hidden Card" src="/img/memory/ambition.png"></Image>
+          <Image alt="Hidden Card" src="/img/memory/creativity.png"></Image>
+          <Image alt="Hidden Card" src="/img/memory/empathy.png"></Image>
+          <Image alt="Hidden Card" src="/img/memory/flexibility.png"></Image>
+          <Image
+            alt="Hidden Card"
+            src="/img/memory/problem-solving.png"
+          ></Image>
+          <Image
+            alt="Hidden Card"
+            src="/img/memory/self-discipline.png"
+          ></Image>
+          <Image alt="Hidden Card" src="/img/memory/teamwork.png"></Image>
+          <Image
+            alt="Hidden Card"
+            src="/img/memory/time-management.png"
+          ></Image>
+        </span>
+      </>
     </Box>
   );
 }
