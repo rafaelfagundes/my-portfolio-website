@@ -1,7 +1,10 @@
+import { Box } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import _ from "lodash";
 import { useEffect, useState } from "react";
+import Button from "../../atoms/button";
 import Card from "../../atoms/card";
+import SoftSkillIconLabel from "../../atoms/soft-skill-icon-label";
 
 type CardType = {
   id: number;
@@ -75,47 +78,109 @@ const cardDeck = [
 
 function MemoryGame() {
   const [cards, setCards] = useState<CardType[]>([]);
+  const [cardsMatched, setCardsMatched] = useState<string[]>([]);
+  const [currentCards, setCurrentCards] = useState<CardType[]>([]);
+
+  const isFlipped = (card: CardType): boolean => {
+    const currentCardsIds = currentCards.map((c) => c.id);
+
+    if (cardsMatched.includes(card.image)) return true;
+    if (currentCardsIds.includes(card.id)) return true;
+
+    return false;
+  };
 
   const selectCard = (card: CardType) => {
-    const _cards = _.cloneDeep(cards);
+    if (isFlipped(card)) return;
+    if (currentCards.length === 0 || currentCards.length === 2) {
+      setCurrentCards([card]);
+    } else {
+      setCurrentCards([card, ...currentCards]);
+    }
+  };
 
-    _cards?.forEach((c) => {
-      if (c.id === card.id) {
-        c.flipped = !card.flipped;
+  const shuffleCards = () => {
+    let _cards1 = _.cloneDeep(cardDeck);
+    let _cards2 = _.cloneDeep(cardDeck);
+
+    const newCards = _cards1.concat(_cards2);
+    newCards.forEach((c, i) => {
+      newCards[i].id = i;
+    });
+
+    setCards(_.shuffle(newCards));
+  };
+
+  const getMatchedCards = () => {
+    let _cards: CardType[] = [];
+
+    cardsMatched.forEach((c) => {
+      const card = cards.find((card) => card.image === c);
+      if (card) {
+        _cards.push(card);
       }
     });
 
-    setCards(_cards);
+    return _cards;
+  };
+
+  const reset = () => {
+    setCardsMatched([]);
+    setCurrentCards([]);
+    shuffleCards();
   };
 
   useEffect(() => {
+    if (currentCards.length === 2) {
+      if (currentCards[0].image === currentCards[1].image) {
+        if (!cardsMatched.includes(currentCards[0].image)) {
+          setCardsMatched([...cardsMatched, currentCards[0].image]);
+        }
+      }
+    }
+  }, [currentCards, cardsMatched]);
+
+  useEffect(() => {
     if (cards.length === 0) {
-      let _cards1 = _.cloneDeep(cardDeck);
-      let _cards2 = _.cloneDeep(cardDeck);
-
-      const newCards = _cards1.concat(_cards2);
-      newCards.forEach((c, i) => {
-        newCards[i].id = i;
-      });
-
-      setCards(_.shuffle(newCards));
+      shuffleCards();
     }
   }, [cards]);
 
   return (
-    <StyledMemoryGame size={WIDTH / 4}>
-      {cards.map((c, i) => (
-        <Card
-          key={c.image + i}
-          id={c.id}
-          image={c.image}
-          title={c.name}
-          size={WIDTH / 4}
-          onClick={() => selectCard(c)}
-          flipped={c.flipped}
-        ></Card>
-      ))}
-    </StyledMemoryGame>
+    <Box display="flex">
+      <Box mr={10}>
+        <StyledMemoryGame size={WIDTH / 4}>
+          {cards.map((c, i) => (
+            <Card
+              key={c.image + i}
+              id={c.id}
+              image={c.image}
+              title={c.name}
+              size={WIDTH / 4}
+              onClick={() => selectCard(c)}
+              flipped={isFlipped(c)}
+            ></Card>
+          ))}
+        </StyledMemoryGame>
+        {cardsMatched.length === cardDeck.length && (
+          <>
+            <Box mb={5}></Box>
+            <Button isMobile={false} size={50} onClick={reset}>
+              Reset
+            </Button>
+          </>
+        )}
+      </Box>
+      <Box>
+        {getMatchedCards().map((c: CardType) => (
+          <SoftSkillIconLabel
+            key={c.id}
+            label={c.name}
+            icon={c.image}
+          ></SoftSkillIconLabel>
+        ))}
+      </Box>
+    </Box>
   );
 }
 
