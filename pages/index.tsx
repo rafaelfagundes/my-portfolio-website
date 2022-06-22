@@ -1,10 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  useColorModeValue,
-  useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue, useMediaQuery } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -33,37 +27,29 @@ const Home: NextPage = () => {
         <CardHeader isMobile={isMobile}></CardHeader>
         <SocialButtons isMobile={isMobile}></SocialButtons>
         <HorizontalLine></HorizontalLine>
-        <Heading
-          textAlign="center"
-          as="h2"
-          fontSize={20}
-          margin="20px 22px 0 22px"
-        >
-          Portfolio
-        </Heading>
         <Flex
           justifyContent="space-between"
           p="25px 0px 5px 0px"
           margin="0 22px"
         >
-          <Link href="/fun-portfolio">
+          <Link href="/more-info">
             <motion.span
               animate={{ y: 0, opacity: 1, scale: 1 }}
               initial={{ y: -20, opacity: 0, scale: 0.9 }}
               transition={{ delay: 0.72, staggerChildren: 0.2 }}
             >
-              <Button isMobile={isMobile} color icon="smile">
-                Fun
+              <Button isMobile={isMobile} color>
+                More Info
               </Button>
             </motion.span>
           </Link>
-          <Link href="/classic-portfolio">
+          <Link href="/resume">
             <motion.span
               animate={{ y: 0, opacity: 1, scale: 1 }}
               initial={{ y: -20, opacity: 0, scale: 0.9 }}
               transition={{ delay: 0.8, staggerChildren: 0.3 }}
             >
-              <Button isMobile={isMobile}>Classic</Button>
+              <Button isMobile={isMobile}>Résumé</Button>
             </motion.span>
           </Link>
         </Flex>
